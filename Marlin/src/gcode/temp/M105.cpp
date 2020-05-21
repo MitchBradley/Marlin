@@ -33,7 +33,7 @@ void GcodeSuite::M105() {
 
   SERIAL_ECHOPGM(STR_OK);
 
-  #if HAS_TEMP_SENSOR
+  #if 0
 
     thermalManager.print_heater_states(target_extruder
       #if ENABLED(TEMP_SENSOR_1_AS_REDUNDANT)

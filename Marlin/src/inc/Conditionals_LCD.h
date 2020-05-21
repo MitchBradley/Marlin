@@ -99,13 +99,16 @@
 
   #define IS_RRD_FG_SC
   #ifndef ST7920_DELAY_1
-    #define ST7920_DELAY_1 DELAY_NS(125)
+//    #define ST7920_DELAY_1 DELAY_NS(125)
+   #define ST7920_DELAY_1 DELAY_NS(1000)
   #endif
   #ifndef ST7920_DELAY_2
-    #define ST7920_DELAY_2 DELAY_NS(125)
+    //    #define ST7920_DELAY_2 DELAY_NS(125)
+  #define ST7920_DELAY_2 DELAY_NS(1000)
   #endif
   #ifndef ST7920_DELAY_3
-    #define ST7920_DELAY_3 DELAY_NS(125)
+//    #define ST7920_DELAY_3 DELAY_NS(125)
+    #define ST7920_DELAY_3 DELAY_NS(1000)
   #endif
 
 #elif ENABLED(MKS_12864OLED)

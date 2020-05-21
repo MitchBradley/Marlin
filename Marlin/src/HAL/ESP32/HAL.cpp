@@ -222,12 +222,9 @@ void HAL_adc_init() {
   }
 }
 
-void HAL_adc_start_conversion(const uint8_t adc_pin) {
-  const adc1_channel_t chan = get_channel(adc_pin);
-  uint32_t mv;
-  esp_adc_cal_get_voltage((adc_channel_t)chan, &characteristics[attenuations[chan]], &mv);
-  HAL_adc_result = mv * 1023.0 / 3300.0;
+uint32_t mvaccum[40];
 
+void HAL_adc_adjust_atten(const adc1_channel_t chan, uint32_t mv) {
   // Change the attenuation level based on the new reading
   adc_atten_t atten;
   if (mv < thresholds[ADC_ATTEN_DB_0] - 100)
@@ -241,6 +238,41 @@ void HAL_adc_start_conversion(const uint8_t adc_pin) {
   else return;
 
   adc1_set_attenuation(chan, atten);
+}
+ 
+#define VALUE_TO_STRING(s) #s
+#define VALUE(s) VALUE_TO_STRING(s)
+#define VAR_NAME_VALUE(var) #var "="  VALUE(var)
+#pragma message(VAR_NAME_VALUE(HAL_ESP32_OVERSAMPLENR))
+
+void HAL_adc_start_conversion(const uint8_t adc_pin) {
+  uint32_t mv;
+  adc1_channel_t chan = get_channel(adc_pin);
+  esp_adc_cal_get_voltage((adc_channel_t)chan, &characteristics[attenuations[chan]], &mv);
+  HAL_adc_adjust_atten(chan, mv);
+
+  // The order of the next lines is important to maintain integer precision
+  // mvaccum is in mV, accumulated ADC_EXTRA_OVERSAMPLING times
+  // The volatile variable avoids constant folding.
+  // Overflow analysis:
+  //   mv for VREF < 4.096V has 12 bits.
+  //   1023 (output resolution) has 10 bits, so mv * 1023 has 22 bits.
+  //   That leaves 32-22=10 bits for ADC_EXTRA_OVERSAMPLING,
+  //   so the multiply will not overflow unless oversampling > 1024.
+  //   Reasonable oversampling values are 1..32, so no problem.
+  //
+  // IIR filter
+
+  uint32_t filter = mvaccum[adc_pin];
+  // Eliminate startup transient
+  if (filter == 0) {
+    filter = mv;
+  }
+  filter = (filter * (HAL_ESP32_OVERSAMPLENR - 1) + mv) / HAL_ESP32_OVERSAMPLENR;
+  mvaccum[adc_pin] = filter;
+  filter *= 1023;
+  // Then scale down according to VREF
+  HAL_adc_result = filter / ADC_VREF_MV;
 }
 
 void analogWrite(pin_t pin, int value) {

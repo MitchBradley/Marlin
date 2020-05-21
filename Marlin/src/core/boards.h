@@ -343,6 +343,9 @@
 #define BOARD_MRR_ESPE                6002  // MRR ESPE board based on ESP32 (with I2S stepper stream)
 #define BOARD_E4D_BOX                 6003  // E4d@BOX
 
+#define BOARD_ESP32_FS_ENDER3         6815  // felixstorm
+#define BOARD_ESP32_WMB_PRINTER0      6816  // MitchBradley
+
 //
 // SAMD51 ARM Cortex M4
 //

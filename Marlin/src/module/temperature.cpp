@@ -35,7 +35,6 @@
 #if ENABLED(EXTENSIBLE_UI)
   #include "../lcd/extui/ui_api.h"
 #endif
-
 #if ENABLED(MAX6675_IS_MAX31865)
   #include "Adafruit_MAX31865.h"
   #ifndef MAX31865_CS_PIN
@@ -64,6 +63,11 @@
 #if MAX6675_SEPARATE_SPI
   #include "../libs/private_spi.h"
 #endif
+
+#define VALUE_TO_STRING(s) #s
+#define VALUE(s) VALUE_TO_STRING(s)
+#define VAR_NAME_VALUE(var) #var "="  VALUE(var)
+#pragma message(VAR_NAME_VALUE(OVERSAMPLENR))
 
 #if ENABLED(PID_EXTRUSION_SCALING)
   #include "stepper.h"
@@ -2425,7 +2429,7 @@ void Temperature::readings_ready() {
             || temp_hotend[e].soft_pwm_amount > 0
           #endif
         );
-        if (rawtemp > temp_range[e].raw_max * tdir) max_temp_error((heater_ind_t)e);
+        //  if (rawtemp > temp_range[e].raw_max * tdir) max_temp_error((heater_ind_t)e);
         if (heater_on && rawtemp < temp_range[e].raw_min * tdir && !is_preheating(e)) {
           #ifdef MAX_CONSECUTIVE_LOW_TEMPERATURE_ERROR_ALLOWED
             if (++consecutive_low_temperature_error[e] >= MAX_CONSECUTIVE_LOW_TEMPERATURE_ERROR_ALLOWED)
@@ -2452,7 +2456,7 @@ void Temperature::readings_ready() {
         || (temp_bed.soft_pwm_amount > 0)
       #endif
     ;
-    if (BEDCMP(temp_bed.raw, maxtemp_raw_BED)) max_temp_error(H_BED);
+    //    if (BEDCMP(temp_bed.raw, maxtemp_raw_BED)) max_temp_error(H_BED);
     if (bed_on && BEDCMP(mintemp_raw_BED, temp_bed.raw)) min_temp_error(H_BED);
   #endif
 
@@ -3005,7 +3009,9 @@ void Temperature::tick() {
     SERIAL_ECHO(c);
     SERIAL_ECHOPAIR(" /" , t);
     #if ENABLED(SHOW_TEMP_ADC_VALUES)
-      SERIAL_ECHOPAIR(" (", r * RECIPROCAL(OVERSAMPLENR));
+    SERIAL_ECHOPAIR(" (", r * RECIPROCAL(OVERSAMPLENR));
+    //    extern uint32_t mv;
+    //    SERIAL_ECHOPAIR(" (", mv);
       SERIAL_CHAR(')');
     #endif
     delay(2);

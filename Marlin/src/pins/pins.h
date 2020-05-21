@@ -576,7 +576,13 @@
 // Espressif ESP32
 //
 
-#elif MB(ESPRESSIF_ESP32)
+#elif MB(ESP32_WMB_PRINTER0)
+  #include "esp32/pins_ESP32_WMB_PRINTER0.h"
+
+#elif MB(ESP32_FS_ENDER3)
+  #include "esp32/pins_ESP32_FS_ENDER3.h"
+
+#elif MB(ESPRESSIF_ESP32)                       // ESP32                                  env:esp32
 
   #include "esp32/pins_ESP32.h"                 // ESP32                                  env:esp32
 #elif MB(MRR_ESPA)

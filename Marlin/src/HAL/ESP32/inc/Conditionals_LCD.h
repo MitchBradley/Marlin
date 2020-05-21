@@ -20,3 +20,22 @@
  *
  */
 #pragma once
+
+#if ENABLED(CR10_STOCKDISPLAY)
+  // These delays prevent display glitces and corruption
+  #ifdef ST7920_DELAY_1
+     #undef ST7920_DELAY_1
+  #endif
+  #define ST7920_DELAY_1 DELAY_NS(600)
+
+  #ifdef ST7920_DELAY_2
+     #undef ST7920_DELAY_2
+  #endif
+  #define ST7920_DELAY_2 DELAY_NS(750)
+
+  #ifdef ST7920_DELAY_3
+    #undef ST7920_DELAY_3
+  #endif
+  #define ST7920_DELAY_3 DELAY_NS(750)
+
+#endif

@@ -116,6 +116,10 @@ void eeprom_read_block (void *__dst, const void *__src, size_t __n);
 void eeprom_update_block (const void *__src, void *__dst, size_t __n);
 
 // ADC
+#if (HAL_ESP32_OVERSAMPLENR > 1)
+  #define HAL_ADC_FILTERED
+#endif
+
 #define HAL_ANALOG_SELECT(pin)
 
 void HAL_adc_init();
