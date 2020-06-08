@@ -45,6 +45,10 @@
 #define Y_MAX_PIN           35
 #define Z_MAX_PIN           32
 
+#define X_MIN_PIN           34
+#define Y_MIN_PIN           35
+#define Z_MIN_PIN           32
+
 //
 // Steppers
 //
@@ -108,4 +112,4 @@
 //
 #define SERVO0_PIN          15
 
-#define Z_MIN_PIN           16
+#define Z_MIN_PROBE_PIN     16
