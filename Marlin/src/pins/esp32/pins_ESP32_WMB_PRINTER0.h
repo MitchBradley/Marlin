@@ -28,7 +28,7 @@
   #error "Oops! Select an ESP32 board in 'Tools > Board.'"
 #endif
 
-#define BOARD_INFO_NAME "ESP32 FS Ender 3 r3"
+#define BOARD_INFO_NAME "ESP32 WMB Printer Controller"
 
 //
 // I2S (steppers & other output-only pins)
@@ -72,14 +72,14 @@
 // Temperature Sensors
 //
 #define TEMP_0_PIN          39  // Analog Input
-// #define TEMP_BED_PIN        36  // Analog Input
+#define TEMP_BED_PIN        36  // Analog Input
 
 //
 // Heaters / Fans
 //
 #define HEATER_0_PIN         2
 #define FAN_PIN             13  // "FAN1"
-// #define HEATER_BED_PIN       4
+#define HEATER_BED_PIN       4
 #define CONTROLLER_FAN_PIN 142  // "FAN2"
 #undef E0_AUTO_FAN_PIN
 #define E0_AUTO_FAN_PIN    143  // "FAN3"
